@@ -86,7 +86,7 @@ export default async function PokemonDetailPage({ params }: PageProps) {
   };
 
   return (
-    <main className="p-6 max-w-4xl mx-auto">
+    <main className="mx-auto max-w-4xl p-6 py-10">
       <script
         type="application/ld+json"
         // eslint-disable-next-line react/no-danger
@@ -95,18 +95,24 @@ export default async function PokemonDetailPage({ params }: PageProps) {
       <PokemonHeader
         name={pokemon.name}
         sprite={pokemon.sprites.front_default}
+        height={pokemon.height}
+        weight={pokemon.weight}
         types={pokemon.types}
       />
 
-      <section className="mt-12 bg-gray-50 p-6 rounded-lg">
-        <h2 className="text-xl font-bold mb-4">Trainer Comments</h2>
+      <section className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+          Trainer Comments
+        </h2>
         <Suspense fallback={<CommentsSkeleton />}>
           <CommentsSection />
         </Suspense>
       </section>
 
-      <section className="mt-12">
-        <h2 className="text-xl font-bold mb-4">Suggested Albums</h2>
+      <section className="mt-8 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
+        <h2 className="mb-4 text-xl font-bold text-gray-900 dark:text-white">
+          Suggested Albums
+        </h2>
         <Suspense fallback={<AlbumsSkeleton />}>
           <AlbumsSection />
         </Suspense>

@@ -1,8 +1,8 @@
-function SkeletonLines({ count }: { count: number }) {
+function SkeletonLines({ count }: Readonly<{ count: number }>) {
   return (
     <div className="animate-pulse space-y-3">
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="h-4 rounded bg-gray-200" />
+        <div key={i} className="h-4 rounded bg-gray-200 dark:bg-gray-800" />
       ))}
     </div>
   );

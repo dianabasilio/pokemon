@@ -51,14 +51,14 @@ export function PostCommentsList({
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Search comments..."
-        className="border p-2 w-full"
+        className="w-full rounded-lg border border-gray-200 bg-white p-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         aria-label="Search comments"
       />
-      <ul className="mt-4 space-y-3">
+      <ul className="mt-4 space-y-3 divide-y divide-gray-100 dark:divide-gray-800">
         {visible.map((c) => (
-          <li key={c.id}>
-            <strong>{c.name}</strong>
-            <p>{c.body}</p>
+          <li key={c.id} className="pt-3 first:pt-0">
+            <strong className="text-gray-900 dark:text-gray-100">{c.name}</strong>
+            <p className="text-gray-600 dark:text-gray-400">{c.body}</p>
           </li>
         ))}
       </ul>

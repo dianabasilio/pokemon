@@ -13,7 +13,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="mt-2 rounded bg-red-600 px-4 py-2 text-white disabled:opacity-50"
+      className="mt-2 rounded-lg bg-red-600 px-4 py-2 font-medium text-white transition hover:bg-red-700 active:scale-[0.98] disabled:opacity-50 disabled:active:scale-100"
     >
       {pending ? "Sending..." : "Comment"}
     </button>
@@ -42,7 +42,7 @@ export function CommentForm({
     <form ref={formRef} action={formAction} className="mt-6">
       <textarea
         name="body"
-        className="border p-2 w-full"
+        className="w-full rounded-lg border border-gray-200 bg-white p-2 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
         placeholder="Write a comment..."
         required
         maxLength={500}
