@@ -1,8 +1,6 @@
-# 🚀 Prueba Técnica Senior: Next.js (App Router) & React
+# 🚀 Next.js (App Router) & React
 
 **Objetivo:** Evaluar criterio arquitectónico, optimización de rendimiento y manejo de flujos asíncronos a nivel Senior con **Next.js 14 (App Router)** y **React 18**.
-**Duración:** 30 minutos.
-**Modalidad:** Live coding o debate técnico guiado sobre el código.
 
 > No se espera que el código compile ni que se ejecute. Se evalúa el **diagnóstico** y el **criterio** para corregirlo. Puedes escribir pseudo-código o explicar en voz alta.
 
