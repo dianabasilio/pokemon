@@ -1,12 +1,29 @@
 "use client";
 
 import { useCallback, useDeferredValue, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import useSWR from "swr";
 import { getComments } from "@/features/pokemon/api/comments";
-import { CommentForm } from "@/features/pokemon/components/client/CommentForm";
 import type { Comment } from "@/features/pokemon/types";
 
 const COMMENTS_KEY = "comments";
+
+// Below-the-fold interactive widget, not needed for the initial render of
+// the comments list: deferring its hydration JS keeps this section's
+// initial bundle smaller. ssr: false is valid here because this whole
+// file is already a Client Component.
+const CommentForm = dynamic(
+  () =>
+    import("@/features/pokemon/components/client/CommentForm").then(
+      (mod) => mod.CommentForm,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="mt-6 h-24 animate-pulse rounded-lg bg-gray-100 dark:bg-gray-800" />
+    ),
+  },
+);
 
 export function PostCommentsList({
   initialComments,

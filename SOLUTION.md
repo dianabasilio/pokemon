@@ -241,6 +241,28 @@ session) — this is a property of the test API, not a bug in the app.
 
 ---
 
+## Lazy loading
+
+- **Images**: the only `<Image>` in the project (the sprite in
+  `PokemonHeader`) uses `next/image`, which lazy-loads by default. It
+  correctly sets `priority` instead, since it's the page's LCP element —
+  the one case where lazy loading should be skipped.
+- **Server sections**: `CommentsSection` and `AlbumsSection` are already
+  deferred via their own `<Suspense>` boundaries (see task 1) — that's the
+  App Router-native form of lazy loading for Server Components, so
+  `next/dynamic` doesn't apply to them (it only affects the client
+  bundle, and Server Components never ship to the client in the first
+  place).
+- **`CommentForm`**: a below-the-fold interactive widget, not needed to
+  render the comments list itself. It's loaded with `next/dynamic(...,
+  { ssr: false })` inside `PostCommentsList` (already a Client Component,
+  so `ssr: false` is valid there), which puts it in its own chunk instead
+  of the initial bundle — verified in the production build output
+  (a separate `872.*.js` chunk containing the form's code, not present in
+  the main page bundle).
+
+---
+
 ## Testing
 
 `__tests__/features/pokemon/`:
