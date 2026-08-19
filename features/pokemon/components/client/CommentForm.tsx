@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 import { useFormState, useFormStatus } from "react-dom";
-import { addCommentAction, type AddCommentState } from "@/actions/comment-actions";
-import type { Comment } from "@/lib/types";
+import { addCommentAction, type AddCommentState } from "@/features/pokemon/actions/comment-actions";
+import type { Comment } from "@/features/pokemon/types";
 
 const initialState: AddCommentState = { status: "idle" };
 

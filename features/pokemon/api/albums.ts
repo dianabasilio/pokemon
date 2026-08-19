@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { UpstreamError } from "@/lib/errors";
-import type { Album } from "@/lib/types";
+import { UpstreamError } from "@/features/pokemon/errors";
+import type { Album } from "@/features/pokemon/types";
 
 const albumSchema = z.object({
   userId: z.number(),

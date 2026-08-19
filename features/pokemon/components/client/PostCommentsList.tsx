@@ -2,9 +2,9 @@
 
 import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import useSWR from "swr";
-import { getComments } from "@/lib/api/comments";
-import { CommentForm } from "@/components/pokemon/CommentForm";
-import type { Comment } from "@/lib/types";
+import { getComments } from "@/features/pokemon/api/comments";
+import { CommentForm } from "@/features/pokemon/components/client/CommentForm";
+import type { Comment } from "@/features/pokemon/types";
 
 const COMMENTS_KEY = "comments";
 

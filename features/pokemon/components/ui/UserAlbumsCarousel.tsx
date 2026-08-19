@@ -1,4 +1,4 @@
-import type { Album } from "@/lib/types";
+import type { Album } from "@/features/pokemon/types";
 
 export function UserAlbumsCarousel({ items }: Readonly<{ items: Album[] }>) {
   if (items.length === 0) {

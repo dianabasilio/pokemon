@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { getPokemon } from "@/lib/api/pokemon";
-import { NotFoundError, UpstreamError } from "@/lib/errors";
+import { getPokemon } from "@/features/pokemon/api/pokemon";
+import { NotFoundError, UpstreamError } from "@/features/pokemon/errors";
 
 const VALID_POKEMON = {
   id: 132,

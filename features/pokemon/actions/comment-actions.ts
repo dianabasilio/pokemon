@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidateTag } from "next/cache";
-import { createComment } from "@/lib/api/comments";
-import { commentFormSchema } from "@/lib/validation";
-import type { Comment } from "@/lib/types";
+import { createComment } from "@/features/pokemon/api/comments";
+import { commentFormSchema } from "@/features/pokemon/validation";
+import type { Comment } from "@/features/pokemon/types";
 
 export type AddCommentState = {
   status: "idle" | "success" | "error";

@@ -1,13 +1,16 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getPokemon } from "@/lib/api/pokemon";
-import { parsePokemonName } from "@/lib/validation";
-import { NotFoundError } from "@/lib/errors";
-import { PokemonHeader } from "@/components/pokemon/PokemonHeader";
-import { CommentsSection } from "@/components/pokemon/CommentsSection";
-import { AlbumsSection } from "@/components/pokemon/AlbumsSection";
-import { CommentsSkeleton, AlbumsSkeleton } from "@/components/pokemon/Skeletons";
+import {
+  getPokemon,
+  parsePokemonName,
+  NotFoundError,
+  PokemonHeader,
+  CommentsSection,
+  AlbumsSection,
+  CommentsSkeleton,
+  AlbumsSkeleton,
+} from "@/features/pokemon";
 
 type PageProps = { params: { name: string } };
 

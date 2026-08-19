@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { Pokemon } from "@/lib/types";
+import type { Pokemon } from "@/features/pokemon/types";
 
 type PokemonHeaderProps = {
   name: string;

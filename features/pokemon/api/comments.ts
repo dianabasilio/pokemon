@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { UpstreamError } from "@/lib/errors";
-import type { Comment } from "@/lib/types";
+import { UpstreamError } from "@/features/pokemon/errors";
+import type { Comment } from "@/features/pokemon/types";
 
 const commentSchema = z.object({
   postId: z.number(),

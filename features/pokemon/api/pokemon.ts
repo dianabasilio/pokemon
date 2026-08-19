@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { NotFoundError, UpstreamError } from "@/lib/errors";
-import type { Pokemon } from "@/lib/types";
+import { NotFoundError, UpstreamError } from "@/features/pokemon/errors";
+import type { Pokemon } from "@/features/pokemon/types";
 
 const pokemonResponseSchema = z.object({
   id: z.number(),

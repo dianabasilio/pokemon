@@ -1,5 +1,5 @@
-import { getAlbums } from "@/lib/api/albums";
-import { UserAlbumsCarousel } from "@/components/pokemon/UserAlbumsCarousel";
+import { getAlbums } from "@/features/pokemon/api/albums";
+import { UserAlbumsCarousel } from "@/features/pokemon/components/ui/UserAlbumsCarousel";
 
 // Async Server Component: its own await doesn't block the rest of the page
 // because a <Suspense> boundary wraps it from app/pokemon/[name]/page.tsx.
