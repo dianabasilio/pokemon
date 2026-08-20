@@ -9,8 +9,9 @@ reasoning behind it. The working project lives in this same repository.
 ```bash
 npm install
 npm run dev     # http://localhost:3000/pokemon/ditto
-npm test        # Vitest + React Testing Library
-npm run build   # production build, verifies static/ISR output
+npm test            # Vitest + React Testing Library
+npm run test:coverage  # same suite, enforces an 80% coverage floor
+npm run build       # production build, verifies static/ISR output
 
 # or, containerized:
 docker compose up --build
@@ -265,13 +266,49 @@ session) — this is a property of the test API, not a bug in the app.
 
 ## Testing
 
-`__tests__/features/pokemon/`:
-- `api/pokemon.test.ts` — `getPokemon` returns typed data on success,
-  throws `NotFoundError` on a 404, `UpstreamError` on any other failure
-  or on a response that doesn't match the expected schema.
-- `components/client/PostCommentsList.test.tsx` — filtering doesn't
-  mutate the original comments array, and the list renders sorted by
-  trainer name.
+Tests are **co-located** with the code they cover (`Foo.tsx` next to
+`Foo.test.tsx`), not gathered in a global `__tests__/` folder — a test
+moves with its component, and the import between them is a plain relative
+path (`./Foo`). The only exception is `app/pokemon/[name]/page.test.ts`,
+which mocks the `@/features/pokemon` barrel: that's a real cross-module
+boundary, not a sibling file, so the alias is the correct choice there too.
+
+19 test files, 50 tests, run with `npm test`. `npm run test:coverage`
+enforces a minimum of 80% (statements/branches/functions/lines) via
+Vitest's `@vitest/coverage-v8` — currently at 90%/82%/91%/92%. Highlights:
+- `lib/api/*` — success, `NotFoundError`/`UpstreamError` on failure, and
+  fallback to `[]` when an upstream response doesn't match its Zod schema.
+- `validation.ts` — name normalization/rejection, comment length limits.
+- `comment-actions.test.ts` — the Server Action with `next/cache` and the
+  API layer mocked: validation short-circuits before any network call,
+  success revalidates and returns the comment, failure degrades gracefully.
+- UI components (`PokemonHeader`, `PokemonTypeBadge`, `UserAlbumsCarousel`,
+  `Skeletons`) rendered with React Testing Library.
+- `CommentsSection`/`AlbumsSection` — async Server Components invoked
+  directly (`await Section()`) and the resolved element rendered with RTL.
+
+**Real finding worth flagging**: the stable npm release of `react-dom`
+(`18.3.1`, what `"react-dom": "^18"` actually resolves to) does not ship
+`useFormState`/`useFormStatus`, nor does it special-case a function
+`action` prop on `<form>`. Next.js 14 only supports these because its own
+build bundles a patched React fork (`next/dist/compiled/react-dom`) —
+outside of Next's bundler, i.e. under plain Vitest, neither API exists.
+`CommentForm.test.tsx` documents this and works around it with a small
+`vi.mock("react-dom", ...)` that reimplements `useFormState` with
+`useState` plus a real `document` `"submit"` listener (calling
+`preventDefault()` to avoid jsdom's unimplemented `requestSubmit()`) —
+so the test still exercises `CommentForm`'s actual logic (the success
+effect, the reset, the error message), not a hollowed-out double. This
+only affects the test environment; production runs under Next's real
+patched React.
+
+**Deliberate exclusion**: no test renders the full default export of
+`app/pokemon/[name]/page.tsx` (the real `notFound()` + `<Suspense>` flow).
+`notFound()` throws a special exception Next intercepts at the framework
+level — replicating that under Vitest/jsdom would mean mocking internal
+Next machinery for little real benefit. That path is already covered by
+the manual end-to-end checks (`npm run dev` / Docker) against all 3 cases
+(happy path, uppercase input, unknown name).
 
 ## Docker
 

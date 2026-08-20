@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { PostCommentsList } from "@/features/pokemon/components/client/PostCommentsList";
-import type { Comment } from "@/features/pokemon/types";
+import { PostCommentsList } from "./PostCommentsList";
+import type { Comment } from "../../types";
 
 const COMMENTS: Comment[] = vi.hoisted(() => [
   { postId: 1, id: 1, name: "Misty", email: "a@a.com", body: "I like Pikachu" },
@@ -12,13 +12,14 @@ const COMMENTS: Comment[] = vi.hoisted(() => [
 
 // SWR's fetcher revalidates on mount: it resolves with the same data as
 // fallbackData so the test doesn't depend on a real request.
-vi.mock("@/features/pokemon/api/comments", () => ({
+vi.mock("../../api/comments", () => ({
   getComments: vi.fn().mockResolvedValue(COMMENTS),
 }));
 
 // The form/Server Action isn't the focus of this test: it's isolated so
-// the test doesn't depend on next/cache or a real request.
-vi.mock("@/features/pokemon/components/client/CommentForm", () => ({
+// the test doesn't depend on next/cache or a real request. This also
+// stands in for the next/dynamic-loaded module.
+vi.mock("./CommentForm", () => ({
   CommentForm: () => null,
 }));
 
