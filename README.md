@@ -217,3 +217,26 @@ El envío del formulario usa `fetch` + `useState` + `window.location.reload()`.
   1. Estado de "enviando" **sin** `useState` manual.
   2. Revalidación de los datos en el servidor tras el éxito, sin recargar la página completa.
   3. Que el formulario siga funcionando de forma razonable si JavaScript aún no ha hidratado.
+
+---
+
+## ✅ Cómo se resolvió cada parte
+
+> Este proyecto ya quedó implementado (no es pseudo-código): corre con `npm install && npm run dev`, tiene tests (`npm test`) y build (`npm run build`). El detalle completo, en inglés, está en [`SOLUTION.md`](./SOLUTION.md) — aquí un resumen punto por punto, en el mismo orden que las tareas de arriba.
+>
+> **Demo en vivo (Vercel):** <https://pokemon-nextjs-zeta.vercel.app>
+
+**1. Cascada de peticiones y streaming**
+`app/pokemon/[name]/page.tsx` hace `await` solo del Pokémon (rápido, crítico para SEO/LCP) y renderiza el header de inmediato. Comentarios y álbumes viven en Server Components separados (`CommentsSection`, `AlbumsSection`), cada uno detrás de su propio `<Suspense>` — cargan en paralelo entre sí y nunca bloquean el header. Ver `features/pokemon/components/server/`.
+
+**2. Caché y renderizado**
+Cada `fetch` tiene su propia estrategia: `getPokemon` usa ISR de 24h (`next: { revalidate: 86400 }`, dato casi inmutable → ruta estática), `getComments`/`getAlbums` revalidan cada 60s (contenido secundario). `generateStaticParams` en `page.tsx` pre-renderiza en build los 10 Pokémon más visitados; el resto se genera on-demand vía ISR. Ver `features/pokemon/api/`.
+
+**3. Robustez y SEO**
+`params.name` se normaliza y valida con Zod antes de llegar a PokeAPI (arregla `/pokemon/Pikachu`). Un 404 real de la API dispara `notFound()` → `not-found.tsx`; cualquier otro fallo lo captura `error.tsx` (arregla `/pokemon/mewthree`). `generateMetadata` + JSON-LD dan SEO/indexabilidad. Ver `features/pokemon/validation.ts`, `app/pokemon/[name]/{not-found,error}.tsx`.
+
+**4. Estado e interactividad en el cliente**
+`PostCommentsList` reescrito: `useMemo` en vez de `useEffect` para el estado derivado, el array ya no se muta (`[...comments].sort(...)`), `key` estable por `id` en vez de índice, y `useDeferredValue` para que el input responda al instante aunque la lista sea grande. Ver `features/pokemon/components/client/PostCommentsList.tsx`.
+
+**5. Mutación de datos con Server Actions**
+`features/pokemon/actions/comment-actions.ts` es un Server Action real (`"use server"`) que valida con Zod y llama `revalidateTag`. `CommentForm.tsx` usa `useFormState`/`useFormStatus` (sin `useState` manual) y sigue funcionando como POST nativo sin JS. Nada de `window.location.reload()`.
